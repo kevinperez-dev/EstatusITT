@@ -1,62 +1,51 @@
-# Sistema de Verificación de Estatus de Certificación Universitaria
+# EstatusITT
 
-## 📌 Descripción
+## Sistema de consulta de estatus de certificación universitaria
 
-Este proyecto es un software diseñado para verificar el estatus de certificación universitaria de los estudiantes. Su principal objetivo es proporcionar una herramienta eficiente y confiable para que los estudiantes consulten el estado de sus trámites de titulación. Esto reduce la carga de trabajo del personal administrativo y brinda mayor transparencia en el proceso.
+**estatusITT** es una plataforma web desarrollada para que los estudiantes puedan consultar el estado de su proceso de certificación o titulación universitaria de manera rápida, clara y segura.
 
-## 🎯 Características
+El sistema permite al alumno acceder con sus credenciales, visualizar su información registrada y consultar el avance de su trámite sin necesidad de acudir presencialmente al área administrativa.
 
-- ✅ **Automatización del seguimiento de trámites** - Permite a los estudiantes conocer el estado de su certificación sin depender de consultas presenciales.
-- ✅ **Reducción de carga administrativa** - Optimiza el trabajo del personal al minimizar consultas repetitivas.
-- ✅ **Acceso semipresencial** - Facilita la gestión de trámites de forma remota, reduciendo la necesidad de traslados innecesarios.
-- ✅ **Flexibilidad y escalabilidad** - Adaptable a distintos flujos de trabajo institucionales y con posibilidad de integración con otras universidades.
-- ✅ **Seguridad y privacidad** - Protección de datos personales y académicos, con acceso restringido a personal autorizado.
+---
 
-## 🛠️ Tecnologías Utilizadas
+## Descripción
 
-Actualmente, el proyecto utiliza las siguientes tecnologías:
+El proyecto surge como una solución para mejorar el seguimiento de los trámites de certificación universitaria. En muchos casos, los estudiantes deben solicitar información directamente al personal administrativo para conocer el avance de su proceso, lo que puede generar consultas repetitivas y tiempos de espera.
 
-- **Lenguaje de programación:** Python.
-- **Frameworks y Librerías:** Django, Bootstrap.
-- **Base de Datos:** MySQL.
+Con **estatusITT**, esta información se concentra en una plataforma web donde el estudiante puede revisar el estado de su trámite de forma sencilla y ordenada.
 
-## 🚀 Instalación y Uso
+---
 
-1. Clona el repositorio:
-   ```
-   git clone https://github.com/usuario/repositorio.git
-   ```
-2. Instalar Python sitio web oficial: https://www.python.org/downloads/
-  
-4. Descargar e instalar entorno virtual:
-   ```
-   pip install virtualenv
-   virtualenv venv
-   ```
-5. Activar entorno virtual:
-   ```
-   .\venv\Scripts\activate
-   ```
-6. Instalar dependencias del proyecto:
-   ```
-   pip install -r requirements.txt
-   ```
-7. Configurar variables de entorno de la base de datos. 
-  Crear archivo .env en directorio raiz junto a manage.py. 
-  Configurar variables con nombre correcto segun tu servidor MySQL
-   ```
-   DB_NAME=mi_basededatos
-   DB_USER=mi_usuario_mysql
-   DB_PASSWORD=mi_contraseña_mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   ```
-8.  Realizar migraciones a la base de datos:
-   ```
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-8. Ejecutar el programa:
-   ```
-   python manage.py runserver
-   ```
+## Objetivo
+
+Desarrollar un sistema web que permita a los estudiantes consultar el estatus de su proceso de certificación o titulación universitaria, facilitando el acceso a la información y reduciendo la dependencia de consultas presenciales.
+
+---
+
+## Funcionalidades principales
+
+- Registro de estudiantes.
+- Inicio de sesión.
+- Recuperación de contraseña.
+- Consulta de información del alumno.
+- Visualización del estatus del trámite.
+- Representación del avance del proceso mediante una barra de progreso.
+
+---
+
+## Tecnologías utilizadas
+
+- **Python**
+- **Django**
+- **MySQL**
+- **Bootstrap**
+- **HTML**
+- **CSS**
+
+---
+
+## Estado del proyecto
+
+El proyecto se encuentra en una etapa inicial funcional, con los módulos básicos necesarios para que el estudiante pueda registrarse, iniciar sesión y consultar el avance de su trámite.
+
+---
