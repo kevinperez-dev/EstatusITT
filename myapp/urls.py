@@ -38,5 +38,5 @@ urlpatterns = [
     path('enviar-correo/', views.enviar_correo, name='enviar_correo'),
 
     # Cierre de sesión
-    path('logout/', auth_views.LogoutView.as_view(next_page='/index'), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
 ]

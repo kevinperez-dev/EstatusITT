@@ -1,5 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+import logging
+from functools import wraps
+
 from django.contrib.auth import login, update_session_auth_hash
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, VerifyUserForm
 from django.contrib.auth.views import LoginView
@@ -9,10 +12,10 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from .forms import ResetPasswordForm # Formulario para capturar la nueva contraseña
-from django.contrib.auth.hashers import make_password
 
 # Obtiene el modelo de usuario
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 ### FUNCIONES AUXILIARES ###
 
@@ -68,7 +71,7 @@ def Estatus(request):
     numero = 1  # Variable de prueba
     return render(request, 'estatus.html', {'numero': numero})
 
-# Restablecimiento de contraseña para usuarios autenticados
+@login_required_with_message
 def Restore_Password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -95,9 +98,12 @@ def Forgot_Password(request):
             username = form.cleaned_data.get("username")  # Número de control
             email = form.cleaned_data.get("email")  # Correo electrónico
             # Guarda temporalmente el usuario en la sesión
-            request.session['verified_user'] = username
+            request.session['verified_user'] = {
+                'username': username,
+                'email': email,
+            }
             messages.success(request, "Usuario verificado correctamente. Proceda a restablecer su contraseña.")
-            return redirect("password_unlown")  # Redirige al formulario de restablecimiento
+            return redirect("update_password")
     else:
         form = VerifyUserForm()
     return render(request, "forgot_password.html", {"form": form})
@@ -111,12 +117,18 @@ def Update_Password(request):
             email = form.cleaned_data.get('email')
             new_password = form.cleaned_data.get('password')
 
+            verified_user = request.session.get('verified_user')
+            if verified_user != {'username': username, 'email': email}:
+                messages.error(request, "Primero verifica tu usuario y correo para restablecer la contraseña.")
+                return redirect("forgot_password")
+
             try:
                 # Validar que el usuario existe
                 user = User.objects.get(username=username, email=email)
                 # Actualizar la contraseña
-                user.password = make_password(new_password)
+                user.set_password(new_password)
                 user.save()
+                request.session.pop('verified_user', None)
                 messages.success(request, "Tu contraseña se ha restablecido correctamente. Por favor, inicia sesión.")
                 return redirect("login")  # Reemplaza 'login' con el nombre de tu URL de inicio de sesión
             except User.DoesNotExist:
@@ -132,16 +144,17 @@ def Update_Password(request):
 
 
 ### VISTA PARA ENVÍO DE CORREO ###
+@login_required_with_message
 def enviar_correo(request):
     asunto = 'Restablecimiento de contraseña'
     mensaje = 'Codigo: '  # Cambiar por contenido dinámico si es necesario
-    remitente = 'l21212019@tectijuana.edu.mx'
-    destinatarios = ['kevinsexy5000@gmail.com']
+    destinatarios = [request.user.email]
     try:
-        send_mail(asunto, mensaje, remitente, destinatarios)
+        send_mail(asunto, mensaje, None, destinatarios)
         return HttpResponse('Correo enviado exitosamente.')
-    except Exception as e:
-        return HttpResponse(f'Error al enviar el correo: {str(e)}')
+    except Exception:
+        logger.exception("No fue posible enviar el correo de restablecimiento")
+        return HttpResponse('No fue posible enviar el correo.', status=500)
 
 ### VISTA PERSONALIZADA DE INICIO DE SESIÓN ###
 class CustomLoginView(LoginView):

@@ -7,7 +7,6 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
 
@@ -46,12 +45,8 @@ class VerifyUserForm(forms.Form):
         username = cleaned_data.get("username")
         email = cleaned_data.get("email")
 
-        # Verificar los valores recibidos
-        print(f"Username ingresado: {username}")
-        print(f"Email ingresado: {email}")
-
-        User = get_user_model()
-        if not User.objects.filter(username=username, email=email).exists():
+        user_model = get_user_model()
+        if not user_model.objects.filter(username=username, email=email).exists():
             raise forms.ValidationError("No se encontró un usuario con ese nombre de usuario y correo.")
         return cleaned_data
     
